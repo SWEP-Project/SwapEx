@@ -1,50 +1,35 @@
-# React + TypeScript + Vite
+# SwapEx
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to SwapEx, This application allows college students to trade products, monitor market data in real-time, and get prospective buyers.
 
-Currently, two official plugins are available:
+##🧑‍💻 Contributing
+We welcome contributions! If you'd like to contribute, please fork the repository, create a new branch, and submit a pull request. Ensure your code follows the project's coding standards and includes relevant tests.
+### How to contribute to the project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#### Fork this project
 
-## Expanding the ESLint configuration
+git fork https://github.com/SWEP-Project/SwapEx.git
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+#### Clone this project
 
-- Configure the top-level `parserOptions` property like this:
+- git clone https://github.com/SWEP-Project/SwapEx.git
+- cd SwapEx
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+#### Create a new branch
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- git checkout -b feature/your-feature-name
+- Commit your changes:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+#### Make Changes to the Code 
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- git add .
+- git commit -m "Add your commit message here"
+- Push to the branch:
+
+
+- git push origin feature/your-feature-name
+- Submit a pull request on GitHub.
+
+If you have any issue you want to solve, create an issue for it and give the best description for another member to understand the problem
+
+
