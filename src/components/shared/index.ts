@@ -17,6 +17,8 @@ export const SignupValidation = z.object({
     file: z.custom<File[]>(),
     location: z.string().min(1, { message: "This field is required" }).max(1000, { message: "Maximum 1000 characters." }),
     tags: z.string(),
+    category:z.string(),
+    price:z.string()
   });
 
   export const ProfileValidation = z.object({
@@ -33,5 +35,5 @@ export const SignupValidation = z.object({
   export { default as PostCard } from "./PostCard";
   export { default as GridPostList } from "./GridPostList";
   export { default as UserCard } from "./UserCard";
- export { default as ProfileUploader } from "./ProfileUploader";
-export { default as PostStats } from "./PostStats"
+  export { default as ProfileUploader } from "./ProfileUploader";
+  export { default as PostStats } from "./PostStats";

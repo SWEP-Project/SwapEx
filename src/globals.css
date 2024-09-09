@@ -154,7 +154,7 @@
   }
 
   .post_details-card {
-    @apply bg-white w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-gray-200 shadow-md;
+    @apply bg-white w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-gray-200 shadow-md xl:rounded-l-[24px];
   }
 
   .post_details-img {
@@ -189,7 +189,7 @@
 
   /* Bottom bar */
   .bottom-bar {
-    @apply z-50 flex-between w-full fixed bottom-0 rounded-t-[20px] bg-white border-t border-gray-200 px-5 py-4 md:hidden;
+    @apply  flex-between w-full fixed bottom-0 rounded-t-[20px] bg-white border-t border-gray-200 px-5 py-4;
   }
 
   /* File uploader */
@@ -288,7 +288,7 @@
 
 
   .shad-textarea {
-    @apply h-36 bg-white rounded-xl border border-gray-300 focus-visible:ring-2 focus-visible:ring-offset-2 ring-offset-4 ring-offset-gray-300 ring-2 ring-blue-500 !important;
+    @apply h-36 bg-slate-100 rounded-xl border border-gray-300 focus-visible:ring-2 focus-visible:ring-offset-2 ring-offset-4 ring-offset-gray-300 ring-2 !important;
   }
 
   /* Button */
@@ -304,3 +304,42 @@
     @apply flex gap-4 items-center justify-start bg-transparent hover:bg-gray-100 text-gray-700 !important;
   }
 }
+
+
+/*message styling */
+.chat-room-container {
+  @apply h-screen flex flex-col flex-1 ;
+}
+
+ .message-container {
+  @apply flex flex-col p-4 overflow-y-auto gap-2 h-full;
+}
+
+.message-image {
+  @apply w-28 h-28
+}
+
+.message-list {
+  @apply flex flex-col gap-2 m-6;
+}
+
+.message-item {
+  @apply p-3 rounded-lg flex flex-col shadow-md max-w-[70%] break-words min-w-[15%];
+}
+
+.message-received {
+  @apply self-start bg-gray-200  text-black border border-gray-300 rounded;
+}
+
+.message-sent {
+  @apply self-end bg-blue-400 text-white border border-blue-300 rounded;
+}
+
+.timestamp {
+  @apply text-xs text-gray-800 mt-1 self-end;
+}
+
+.input-area {
+  @apply fixed bottom-0 w-full flex items-center px-4 py-2 bg-white border-t border-gray-200;
+}
+ 

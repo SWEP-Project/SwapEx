@@ -52,7 +52,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isCollapsed, onToggle }) => {
         </div>
 
         {isLoading || !user.email ? (
-          <div className="h-14">
+          <div className="h-14 invert">
             <Loader />
           </div>
         ) : (
@@ -77,7 +77,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isCollapsed, onToggle }) => {
               <li
                 key={link.label}
                 className={`leftsidebar-link group ${
-                  isActive ? "bg-primary-500" : ""
+                  isActive && "bg-blue-100"
                 }`}
               >
                 <NavLink

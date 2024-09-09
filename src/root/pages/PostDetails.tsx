@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, Route } from "react-router-dom";
 
 import { Button } from "../../components/ui/button";
 import { Loader } from "../../components/shared";
@@ -8,14 +8,20 @@ import {
   useGetPostById,
   useGetUserPosts,
   useDeletePost,
+  useCreateChat,
+  useGetUserById,
+  useGetCurrentUser,
 } from "../../lib/react-query/queries";
 import { multiFormatDateString } from "../../lib/utils";
 import { useUserContext } from "../../context/AuthContext";
+import { toast, useToast } from "../../components/ui/use-toast";
 
 const PostDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useUserContext();
+
+  const { data: currentUser } = useGetCurrentUser();
 
   const { data: post, isLoading } = useGetPostById(id);
   const { data: userPosts, isLoading: isUserPostLoading } = useGetUserPosts(
@@ -31,6 +37,47 @@ const PostDetails = () => {
     deletePost({ postId: id, imageId: post?.imageId });
     navigate(-1);
   };
+
+  const { mutateAsync: createChat, isPending: isLoadingCreate } =
+  useCreateChat();
+
+  //Handler
+
+  const handleStartChat = async () => {
+    const newChat = await createChat({
+      userId: user.id,
+      receiverId: post?.creator.$id,
+      lastMessage:null,
+      isSeen: false
+    });
+
+    if (!newChat) {
+      toast({
+        title: `Failed to create chat`,
+      });
+    }
+    navigate("/message");
+  }
+
+ 
+const handleBarterRequest = async () => {
+  const hasPostToBarter = currentUser?.posts.length > 0;
+  const postCreatorId = post?.creator.$id
+
+  const { toast } = useToast();
+
+  if (hasPostToBarter) {
+
+
+    navigate(`/profile/${currentUser?.$id}/select-barter-item`, {
+      state: { postCreatorId } // Pass postCreatorId to the selection page
+    });
+  }else{
+    toast({ title: "User must have at least one post to initiate barter"  });
+    return;
+  }
+}
+
 
   return (
     <div className="post_details-container">
@@ -103,9 +150,7 @@ const PostDetails = () => {
                 <Button
                   onClick={handleDeletePost}
                   variant="ghost"
-                  className={`ost_details-delete_btn ${
-                    user.id !== post?.creator.$id && "hidden"
-                  }`}>
+                  className={`${user.id !== post?.creator.$id && "hidden"}`}>
                   <img
                     src={"/images/delete.svg"}
                     alt="delete"
@@ -129,6 +174,32 @@ const PostDetails = () => {
                   </li>
                 ))}
               </ul>
+              <p>Market value: NGN{post?.price} </p>
+
+              <Button
+                  onClick={handleStartChat}
+                  variant="ghost"
+                  className={`${user.id == post?.creator.$id && "hidden"}`}>
+                  <img
+                    src={"/images/chat.svg"}
+                    alt="chat"
+                    width={24}
+                    height={24}
+                  />
+                    Start Chat
+              </Button>
+              <Button
+                  onClick={handleBarterRequest}
+                  variant="ghost"
+                  className={`${user.id == post?.creator.$id && "hidden"}`}>
+                  <img
+                    src={"/images/chat.svg"}
+                    alt="chat"
+                    width={24}
+                    height={24}
+                  />
+                    Suggest Barter
+              </Button>
             </div>
 
             <div className="w-full">
@@ -152,6 +223,6 @@ const PostDetails = () => {
       </div>
     </div>
   );
-};
+}
 
 export default PostDetails;

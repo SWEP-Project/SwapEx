@@ -8,6 +8,8 @@ export const appwriteConfig = {
     postCollectionId:import.meta.env.VITE_APPWRITE_POSTCOLLECTION_ID,
     storageId:import.meta.env.VITE_APPWRITE_MEDIA,
     savesCollectionId:import.meta.env.VITE_APPWRITE_SAVECOLLECTION_ID,
+    chatCollectionId:import.meta.env.VITE_APPWRITE_CHATCOLLECTION_ID,
+    messageCollectionId:import.meta.env.VITE_APPWRITE_MESSAGECOLLECTION_ID,
 }
 
 export const client = new Client()

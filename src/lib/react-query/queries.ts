@@ -25,8 +25,13 @@ import {
     searchPosts,
     savePost,
     deleteSavedPost,
+    createChat,
+    getUserChats,
+    getMessage,
+    sendMessage,
+    getChatById,
   } from "../../lib/appwrite/api";
-  import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "../types";
+  import { IChat, INewMessage, INewPost, INewUser, IUpdatePost, IUpdateUser } from "../types";
   
   // ============================================================
   // AUTH QUERIES
@@ -244,3 +249,47 @@ import {
       },
     });
   }; 
+
+  export const useCreateChat = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: (chat: IChat) => createChat(chat),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_USER_CHATS],
+        });
+      },
+    });
+  };
+
+  export const useGetUserChats = (userId?: string) => {
+    return useQuery({
+      queryKey: [QUERY_KEYS.GET_USER_CHATS, userId],
+      queryFn: () => getUserChats(userId),
+      enabled: !!userId,
+    });
+  };
+
+  export const useGetMessages = (chatId?: string) => {
+    return useQuery({
+      queryKey: [QUERY_KEYS.GET_MESSAGES, chatId],
+      queryFn: () => getMessage(chatId)  
+    })
+  }
+  export const useSendMessage = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: (message: INewMessage) => sendMessage(message),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_MESSAGES],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_USER_CHATS],
+        });
+      },
+    });
+  };
+
+
+  

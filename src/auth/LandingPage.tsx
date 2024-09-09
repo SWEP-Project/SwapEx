@@ -34,6 +34,9 @@ const LandingPage = () => {
                 <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 The Next Generation Of Trading System
                 </h1>
+                <h3 className="text-2xl md:text-3xl font-bold mb-3">
+                The Next Generation Of Trading System
+                </h3>
                 <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12">
                 Buy, Sell and Barter Seamlessly With A Single Tap
                 </p>

@@ -1,73 +1,73 @@
-import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "../types";
+import { IChat, INewMessage, INewPost, INewUser, IUpdatePost, IUpdateUser } from "../types";
 import { account, appwriteConfig, avatar, database, storage } from "./config";
 import { ID, Query } from "appwrite"
 
 export async function createUserAccount(user:INewUser) {
-    try {
-        const newAccount = await account.create(
-            ID.unique(),
-            user.email,
-            user.password,
-            user.name,
-        )
+  try {
+      const newAccount = await account.create(
+          ID.unique(),
+          user.email,
+          user.password,
+          user.name,
+      )
 
-        console.log("This is the newAccount value", newAccount)
+      console.log("This is the newAccount value", newAccount)
 
-        if(!newAccount) throw Error
+      if(!newAccount) throw Error
 
-        const avatarURL= avatar.getInitials(user.name)
+      const avatarURL= avatar.getInitials(user.name)
 
-        const newUser = await saveUserToDB({
-            accountId: newAccount.$id,
-            email: newAccount.email,
-            name: newAccount.name,
-            username: user.username,
-            imageUrl: avatarURL
-        })
+      const newUser = await saveUserToDB({
+          accountId: newAccount.$id,
+          email: newAccount.email,
+          name: newAccount.name,
+          username: user.username,
+          imageUrl: avatarURL
+      })
 
-        console.log("this is the value returned by createaccount", newUser)
+      console.log("this is the value returned by createaccount", newUser)
 
-        
-        return newUser
-        
-    } catch (error) {
+      
+      return newUser
+      
+  } catch (error) {
 
-        console.log(error)
-        return error
-        
-    }
-    
+      console.log(error)
+      return error
+      
+  }
+  
 }
 
 export async function saveUserToDB(user: {
-    accountId: string,
-    email: string,
-    name: string,
-    imageUrl: URL,
-    username?: string
+  accountId: string,
+  email: string,
+  name: string,
+  imageUrl: URL,
+  username?: string
 }){
-    try {
+  try {
 
-       /* const avatarURL= avatar.getInitials(user.name)
-        user.ImageURL = avatarURL*/
+     /* const avatarURL= avatar.getInitials(user.name)
+      user.ImageURL = avatarURL*/
 
-        const newUser = await database.createDocument(
-            appwriteConfig.databaseId,
-            appwriteConfig.userCollectionId,
-            ID.unique(),
-            user,
-        )
-        console.log(newUser)
+      const newUser = await database.createDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.userCollectionId,
+          ID.unique(),
+          user,
+      )
+      console.log(newUser)
 
-        if (newUser){
-            console.log("created successfully", newUser)
-        }
+      if (newUser){
+          console.log("created successfully", newUser)
+      }
 
-        return newUser
-    } catch (error) {
-        console.log(error)
-        console.log("current user permissions:", user)
-    }
+      return newUser
+  } catch (error) {
+      console.log(error)
+      console.log("current user permissions:", user)
+  }
 }
 
 export async function signInAccount(user: { email: string; password: string }) {
@@ -111,8 +111,6 @@ try {
 export async function getCurrentUser() {
 try {
     const currentAccount = await getAccount();
-    console.log("this is from getUser", currentAccount)
-    console.log("This is the value of not currentAccount1", !currentAccount)
 
     if (!currentAccount) throw Error;
     console.log("This is the value of not currentAccount2", !currentAccount)
@@ -184,6 +182,8 @@ export async function createPost(post:INewPost) {
           imageId: uploadedFile.$id,
           location: post.location,
           tags: tags,
+          category: post.category,
+          price: post.price
         }
       );
   
@@ -250,7 +250,7 @@ export async function createPost(post:INewPost) {
         appwriteConfig.databaseId,
         appwriteConfig.postCollectionId,
         [
-          Query.search('caption', searchTerm)
+          Query.or([Query.search('caption', searchTerm), Query.search('category', searchTerm)])
           
         ]
       );
@@ -583,3 +583,129 @@ export async function createPost(post:INewPost) {
       console.log(error);
     }
   }
+
+  
+  export async function createChat(chat: IChat) {
+    try {
+      // Check if chat already exists between user and receiver
+      const existingChats = await database.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.chatCollectionId,
+        [
+          Query.and([Query.equal('user', chat.userId), Query.equal('receiver', chat.receiverId)]),
+        ]
+      );
+  
+      // If a chat already exists, return the existing chat
+      if (existingChats.documents.length > 0) {
+        console.log('Chat already exists');
+        return existingChats.documents[0];
+      }
+  
+      // If no existing chat is found, create a new one
+      const newChat = await database.createDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.chatCollectionId,
+        ID.unique(),
+        {
+          user: chat.userId,
+          receiver: chat.receiverId,
+          lastMessage: chat.lastMessage,
+          isSeen: chat.isSeen,
+        }
+      );
+  
+      if (!newChat) throw new Error('Failed to create chat');
+  
+      return newChat;
+    } catch (error) {
+      console.error('Error creating or fetching chat:', error);
+      throw error;
+    }
+  }
+  
+
+
+  export async function getUserChats(userId?: string){
+    if(!userId) return;
+
+    try {
+      const chat = await database.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.chatCollectionId,
+        [
+          Query.or([Query.equal('user', userId), Query.equal('receiver', userId)]),
+          Query.orderDesc('$updatedAt'),
+        ]
+    )
+  
+    if (!chat) throw Error
+  
+    return chat
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
+  export async function getChatById(chatId?: string) {
+    if (!chatId) throw Error;
+  
+    try {
+      const chat = await database.getDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        chatId
+      );
+  
+      if (!chat) throw Error;
+  
+      return chat;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+
+export async function sendMessage(message: INewMessage) {
+  try {
+    const newMessage = await database.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.messageCollectionId,
+      ID.unique(),
+      {
+        content: message.content,
+        sender: message.senderId,
+        chat: message.chatId,
+        imageUrl: message.imageUrl
+      }
+    )
+
+    if (!newMessage) throw Error
+
+    return newMessage
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function getMessage(chatId?: string){
+  if (!chatId) throw Error
+
+  try {
+    const messages = await database.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.messageCollectionId,
+      [
+        Query.equal('chat', chatId),
+        Query.orderAsc("$createdAt"),
+        Query.limit(100)
+      ]
+    )
+    if (!messages) throw Error
+    
+    return messages
+  } catch (error) {
+    console.log(error)
+  }
+}

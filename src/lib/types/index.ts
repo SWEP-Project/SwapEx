@@ -48,3 +48,17 @@ export type INavLink = {
     username: string;
     password: string;
   };
+
+  export type INewMessage = {
+    content: string
+    senderId: string
+    chatId?: string
+    imageUrl?: string
+  }
+
+  export type IChat = {
+    userId: string
+    receiverId: string
+    lastMessage: string | null
+    isSeen: boolean
+  }

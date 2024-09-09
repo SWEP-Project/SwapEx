@@ -37,6 +37,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
     defaultValues: {
       caption: post ? post?.caption : "",
       file: [],
+      category: post ? post.category:"",
+      price: post? post?.price:"",
       location: post ? post.location : "",
       tags: post ? post.tags.join(",") : "",
     },
@@ -91,10 +93,10 @@ const PostForm = ({ post, action }: PostFormProps) => {
           name="caption"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="shad-form_label">Caption</FormLabel>
+              <FormLabel className="shad-form_label">Description</FormLabel>
               <FormControl>
                 <Textarea
-                  className="shad-textarea custom-scrollbar"
+                  className="shad-textarea custom-scrollbar" placeholder = "Enter a full text description of the product to provide more info"
                   {...field}
                 />
               </FormControl>
@@ -120,12 +122,41 @@ const PostForm = ({ post, action }: PostFormProps) => {
           )}
         />
 
+        
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="shad-form_label">Add Category</FormLabel>
+              <FormControl>
+                <Input type="text" className="shad-input" {...field} />
+              </FormControl>
+              <FormMessage className="shad-form_message" />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="location"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">Add Location</FormLabel>
+              <FormControl>
+                <Input type="text" className="shad-input" {...field} />
+              </FormControl>
+              <FormMessage className="shad-form_message" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="shad-form_label">Add price</FormLabel>
               <FormControl>
                 <Input type="text" className="shad-input" {...field} />
               </FormControl>

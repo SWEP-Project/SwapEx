@@ -28,7 +28,20 @@ const Topbar = () => {
           </div>
         </Link>
 
+
         <div className="flex gap-4">
+        <Button
+          onClick={() => navigate(-1)}
+          variant="ghost"
+          className="shad-button_ghost">
+          <img
+            src={"/images/back.svg"}
+            alt="back"
+            width={24}
+            height={24}
+          />
+          <p className="small-medium lg:base-medium">Back</p>
+        </Button>
           <Button
             variant="ghost"
             className="shad-button_ghost"

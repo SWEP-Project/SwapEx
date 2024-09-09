@@ -12,6 +12,7 @@ import { LikedPosts } from "../pages";
 import { useUserContext } from "../../context/AuthContext";
 import { useGetUserById } from "../../lib/react-query/queries";
 import { GridPostList, Loader } from "../../components/shared";
+import BarterRedirect from "./BarterRedirect";
 
 interface StabBlockProps {
   value: string | number;
@@ -31,6 +32,8 @@ const Profile = () => {
   const { pathname } = useLocation();
 
   const { data: currentUser } = useGetUserById(id || "");
+
+  console.log(currentUser?.posts)
 
   if (!currentUser)
     return (
@@ -135,7 +138,11 @@ const Profile = () => {
           element={<GridPostList posts={currentUser.posts} showUser={false} />}
         />
         {currentUser.$id === user.id && (
-          <Route path="/liked-posts" element={<LikedPosts />} />
+          <Route>
+            <Route path="/liked-posts" element={<LikedPosts />} />
+            <Route path = "/select-barter-item" element = {<BarterRedirect />} />
+          </Route>
+ 
         )}
       </Routes>
       <Outlet />
