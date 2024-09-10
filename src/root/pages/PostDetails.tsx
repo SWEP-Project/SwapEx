@@ -13,12 +13,13 @@ import {
 } from "../../lib/react-query/queries";
 import { multiFormatDateString } from "../../lib/utils";
 import { useUserContext } from "../../context/AuthContext";
-import { toast, useToast } from "../../components/ui/use-toast";
+import { useToast } from "../../components/ui/use-toast";
 
 const PostDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useUserContext();
+  const { toast } = useToast();
 
   const { data: currentUser } = useGetCurrentUser();
 
@@ -63,7 +64,7 @@ const handleBarterRequest = async () => {
   const hasPostToBarter = currentUser?.posts.length > 0;
   const postCreatorId = post?.creator.$id
 
-  const { toast } = useToast();
+
 
   if (hasPostToBarter) {
 
