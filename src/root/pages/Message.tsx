@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom"
-import ChatList from "./ChatList"
 import ChatLayout from "../ChatLayout"
 import ChatSet from "./ChatSet"
 

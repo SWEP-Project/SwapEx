@@ -32,15 +32,6 @@ import {
   } from "../../lib/appwrite/api";
   import { IChat, INewMessage, INewPost, INewUser, IUpdatePost, IUpdateUser } from "../types";
 
-  interface Document {
-    $id: string;
-    // Add other fields as necessary
-  }
-  
-  interface LastPage {
-    documents: Document[];
-    // Add other fields as necessary
-  }
   
   // ============================================================
   // AUTH QUERIES
@@ -72,15 +63,16 @@ import {
   export const useGetPosts = () => {
     return useInfiniteQuery({
       queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-      queryFn: getInfinitePosts,
+      queryFn: ({ pageParam = '' }) => getInfinitePosts({ pageParam }), // default to an empty string for pageParam
       getNextPageParam: (lastPage) => {
-        if ( lastPage && lastPage.documents.length === 0) {
+        if (!lastPage || lastPage.documents.length === 0) {
           return null;
         }
-    
+  
         const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
-        return lastId;
+        return lastId; // This is a string
       },
+      initialPageParam: '', // Default to an empty string for the first page
     });
   };
   

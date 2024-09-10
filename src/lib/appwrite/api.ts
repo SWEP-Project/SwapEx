@@ -258,11 +258,11 @@ export async function createPost(post:INewPost) {
     }
   }
   
-  export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
+  export async function getInfinitePosts({ pageParam }: { pageParam?: string }) {
     const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
   
     if (pageParam) {
-      queries.push(Query.cursorAfter(pageParam.toString()));
+      queries.push(Query.cursorAfter(pageParam));
     }
   
     try {
@@ -272,13 +272,15 @@ export async function createPost(post:INewPost) {
         queries
       );
   
-      if (!posts) throw Error;
+      if (!posts) throw new Error("No posts found");
   
       return posts;
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching posts:", error);
+      throw new Error("Error fetching posts");
     }
   }
+  
   
   // ============================== GET POST BY ID
   export async function getPostById(postId?: string) {

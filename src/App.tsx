@@ -3,7 +3,7 @@ import './globals.css'
 import LandingPage from './auth/LandingPage'
 
 
-import { CreatePost, EditPost, Home, Message, PostDetails, Profile, Saved, UpdateProfile } from './root/pages'
+import { CreatePost, EditPost, Home, PostDetails, Profile, Saved, UpdateProfile } from './root/pages'
 import SignUp from './auth/SignUp'
 import { Toaster } from './components/ui/toaster'
 import SigninForm from './auth/SignInForm'

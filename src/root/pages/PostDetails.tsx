@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate, Route } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 import { Button } from "../../components/ui/button";
 import { Loader } from "../../components/shared";
@@ -9,7 +9,6 @@ import {
   useGetUserPosts,
   useDeletePost,
   useCreateChat,
-  useGetUserById,
   useGetCurrentUser,
 } from "../../lib/react-query/queries";
 import { multiFormatDateString } from "../../lib/utils";
@@ -38,7 +37,7 @@ const PostDetails = () => {
     navigate(-1);
   };
 
-  const { mutateAsync: createChat, isPending: isLoadingCreate } =
+  const { mutateAsync: createChat } =
   useCreateChat();
 
   //Handler
