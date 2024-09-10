@@ -76,7 +76,6 @@ export async function signInAccount(user: { email: string; password: string }) {
           
           if (currentSession){
             await account.deleteSession('current')
-            console.log('Logged out of current Session')
           }
         } catch(error){
                 console.log("Error logging out", error)
@@ -85,9 +84,6 @@ export async function signInAccount(user: { email: string; password: string }) {
 
         try {
                 const session = await account.createEmailPasswordSession(user.email, user.password);
-                console.log("This is to know the value of session in signInAccount", session)
-
-            
                 return session;
             } catch(error){
                 console.log("Error creating session", )
@@ -113,7 +109,6 @@ try {
     const currentAccount = await getAccount();
 
     if (!currentAccount) throw Error;
-    console.log("This is the value of not currentAccount2", !currentAccount)
 
 
 

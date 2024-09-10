@@ -29,9 +29,18 @@ import {
     getUserChats,
     getMessage,
     sendMessage,
-    getChatById,
   } from "../../lib/appwrite/api";
   import { IChat, INewMessage, INewPost, INewUser, IUpdatePost, IUpdateUser } from "../types";
+
+  interface Document {
+    $id: string;
+    // Add other fields as necessary
+  }
+  
+  interface LastPage {
+    documents: Document[];
+    // Add other fields as necessary
+  }
   
   // ============================================================
   // AUTH QUERIES
@@ -63,14 +72,12 @@ import {
   export const useGetPosts = () => {
     return useInfiniteQuery({
       queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-      queryFn: getInfinitePosts as any,
-      getNextPageParam: (lastPage: any) => {
-        // If there's no data, there are no more pages.
-        if (lastPage && lastPage.documents.length === 0) {
+      queryFn: getInfinitePosts,
+      getNextPageParam: (lastPage) => {
+        if ( lastPage && lastPage.documents.length === 0) {
           return null;
         }
-  
-        // Use the $id of the last document as the cursor.
+    
         const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
         return lastId;
       },
